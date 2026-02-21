@@ -1,0 +1,44 @@
+{% extends 'investigator/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Start Banner Area -->
+<div class="banner-area">
+    <div class="container-fluid">
+        <div class="row align-items-center" data-cues="slideInUp">
+            <div class="col-lg-6">
+                <div class="banner-content">
+                    <div class="title">
+                        <h1>Essential Policy for Cyber security Protection.</h1>
+                        <p>In today's increasingly digital world, cybersecurity has become paramount. With the rapid expansion of online activities,</p>
+                    </div>
+                    <div class="banner-button d-flex align-items-center">
+                        <a class="demo text-decoration-none" href="">Request A Demo</a>
+                        <div class="play-btn d-flex align-items-center">
+                            <a href="http://www.youtube.com/watch?v=0O2aH4XLbto" class="text-decoration-none popup-youtube icon">
+                                <i class="ri-play-mini-fill"></i>
+                            </a>
+                            <a class="text-decoration-none popup-youtube" href="http://www.youtube.com/watch?v=0O2aH4XLbto">
+                                Watch Intro Video
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="banner-image">
+                    <img src="{% static "assets/images/hero/cyber2.jpg" %}" alt="banner-image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="shape">
+        <div class="shape-2">
+            <img src="{% static "assets/images/shape/shape-2.png" %}" alt="shape">
+        </div>
+    </div>
+</div>        
+
+
+{% endblock %}

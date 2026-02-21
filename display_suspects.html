@@ -1,0 +1,60 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-primary">Suspect List</h2>
+
+        {% if suspects %}
+        <table class="table table-bordered mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for suspect in suspects %}
+                <tr>
+                    <td>{{ suspect.id }}</td>
+                    <td>{{ suspect.name }}</td>
+                    <td>{{ suspect.age }}</td>
+                    <td>{{ suspect.address }}</td>
+                    <td>{{ suspect.description }}</td>
+                    <td>
+                        {% if suspect.image %}
+                        <img src="{{ suspect.image.url }}" alt="Suspect Image" width="60" height="60" class="rounded">
+                        {% else %}
+                        No Image
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if suspect.status == "Under Investigation" %}
+                        <span class="badge bg-warning text-dark">Under Investigation</span>
+                        {% elif suspect.status == "Arrested" %}
+                        <span class="badge bg-danger">Arrested</span>
+                        {% else %}
+                        <span class="badge bg-success">Released</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_suspect' suspect.id %}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="{% url 'delete_suspect' suspect.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center text-muted mt-4">No suspects added yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

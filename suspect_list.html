@@ -1,0 +1,60 @@
+{% extends 'investigator/base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container mt-5">
+    <h2 class="text-center text-primary mb-4">All Suspects</h2>
+
+    {% if suspects %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Address</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for suspect in suspects %}
+                        <tr>
+                            <td>{{ forloop.counter }}</th>
+                            <td>{{ suspect.name }}</td>
+                            <td>{{ suspect.age }}</td>
+                            <td>{{ suspect.address|truncatechars:50 }}</td>
+                            <td>{{ suspect.description|truncatechars:50 }}</td>
+                            <td class="{% if suspect.status == 'Arrested' %}text-success{% elif suspect.status == 'Released' %}text-danger{% else %}text-warning{% endif %}">
+                                {{ suspect.status }}
+                            </td>
+                            <td>
+                                {% if suspect.image %}
+                                    <img src="{{ suspect.image.url }}" alt="Suspect Image" class="img-thumbnail" width="100">
+                                {% else %}
+                                    No Image
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center">No suspects added yet.</div>
+    {% endif %}
+</main>
+
+<style>
+    .img-thumbnail {
+        border-radius: 10px;
+    }
+    @media (max-width: 768px) {
+        table {
+            font-size: 14px;
+        }
+    }
+</style>
+{% endblock %}

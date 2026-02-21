@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="page-title-area">
+    <div class="container">
+        <div class="page-title-content text-center">
+            <h1>Log In Now</h1>
+            <ul class="list-unstyled ps-0 mb-0">
+                <li class="d-inline-block">
+                    <a class="text-decoration-none" href="index.html">Home</a>
+                </li>
+                <li class="d-inline-block">Log In Now</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- End Page Title Area -->
+
+<!-- Start Login Area -->
+<div class="login-area ptb-100"> 
+    <div class="container">
+        <div class="login-info" data-cue="slideInUp">
+            <h1>Log In Now</h1>
+            <form method="POST" action="{% url 'view_login' %}">
+                {% csrf_token %}
+                
+                <center>{% if messages %}
+                    <div class="alert alert-danger">
+                        {% for message in messages %}
+                            <p class="mb-0">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}</center>
+            
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="Your password" required>
+                </div>
+                
+                <button class="default-btn border-0" type="submit">
+                    <i class="ri-arrow-right-line"></i>
+                    Log In Now
+                </button>
+                <a href="/investigator_register">
+                <p>Don't have an account? <br></a>
+                    <!-- <a class="text-decoration-none" href="{% url 'investigator_register' %}">Investigator</a><br>
+                    <a class="text-decoration-none" href="{% url 'victim_register' %}">Victim</a> -->
+                </p>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+<!-- End Login Area -->
+
+
+
+{% endblock %}

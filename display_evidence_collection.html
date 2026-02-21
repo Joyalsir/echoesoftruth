@@ -1,0 +1,187 @@
+{% extends 'investigator/base.html' %}
+{% load static %}
+{% block content %}
+
+<main class="container mt-5">
+    <h2 class="text-center text-primary mb-4">All Collected Evidence</h2>
+
+    {% for c in case %}
+        <section class="card mb-4 shadow-lg">
+            <header class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ c.case_title }}</h5>
+            </header>
+            <div class="card-body">
+                <p><strong>Evidence Description:</strong> 
+                    {{ c.evidence_description|truncatechars:100 }} 
+                    {% if c.evidence_description|length > 100 %}
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal{{ c.id }}-evidence">Read More</a>
+                    {% endif %}
+                </p>
+
+                <p><strong>Witness Statements:</strong> 
+                    {{ c.witness_statements|truncatechars:100 }} 
+                    {% if c.witness_statements|length > 100 %}
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal{{ c.id }}-witness">Read More</a>
+                    {% endif %}
+                </p>
+
+                <p><strong>Forensic Report:</strong> 
+                    {{ c.forensic_report|truncatechars:100 }} 
+                    {% if c.forensic_report|length > 100 %}
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal{{ c.id }}-forensic">Read More</a>
+                    {% endif %}
+                </p>
+
+                <p><strong>Suspect Details:</strong> 
+                    {{ c.suspect_details|truncatechars:100 }} 
+                    {% if c.suspect_details|length > 100 %}
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal{{ c.id }}-suspect">Read More</a>
+                    {% endif %}
+                </p>
+
+                <div class="row">
+                    {% if c.image1 %}
+                        <div class="col-12 col-md-4 text-center">
+                            <img src="{{ c.image1.url }}" alt="Evidence Image 1" class="img-fluid img-thumbnail mb-2">
+                        </div>
+                    {% endif %}
+                    {% if c.image2 %}
+                        <div class="col-12 col-md-4 text-center">
+                            <img src="{{ c.image2.url }}" alt="Evidence Image 2" class="img-fluid img-thumbnail mb-2">
+                        </div>
+                    {% endif %}
+                    {% if c.image3 %}
+                        <div class="col-12 col-md-4 text-center">
+                            <img src="{{ c.image3.url }}" alt="Evidence Image 3" class="img-fluid img-thumbnail mb-2">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Final Report Button -->
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal{{ c.id }}-final-report"
+                            {% if c.caseanalysis.final_conclusion == "Closed" %} disabled {% endif %}>
+                        Final Report
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modals for Read More -->
+        <div class="modal fade" id="modal{{ c.id }}-evidence" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Evidence Description</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ c.evidence_description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal{{ c.id }}-witness" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Witness Statements</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ c.witness_statements }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal{{ c.id }}-forensic" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Forensic Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ c.forensic_report }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal{{ c.id }}-suspect" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Suspect Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ c.suspect_details }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Report Modal -->
+        <div class="modal fade" id="modal{{ c.id }}-final-report" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Submit Final Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="POST" action="{% url 'submit_final_report' c.id %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <label for="identified_suspect" class="form-label">Identified Suspect:</label>
+                            <!-- <select class="form-select" name="identified_suspect" required>
+                                <option value="">Select Suspect</option>
+                                {% for suspect in suspects %}
+                                    <option value="{{ suspect.id }}">{{ suspect.name }}</option>
+                                {% endfor %}
+                            </select> -->
+                            <input type="text" class="form-control" name="identified_suspect" required>
+
+                            <label for="analysis_summary" class="form-label mt-3">Analysis Summary:</label>
+                            <textarea class="form-control" name="analysis_summary" rows="3" required></textarea>
+
+                            <label for="final_conclusion" class="form-label mt-3">Final Conclusion:</label>
+                            <select class="form-select" name="final_conclusion" required>
+                                <option value="Open">Open</option>
+                                <option value="Solved">Solved</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    {% empty %}
+        <div class="alert alert-warning text-center">No evidence collected yet.</div>
+    {% endfor %}
+</main>
+
+<style>
+    .modal-content {
+        background-color: white !important;
+    }
+
+    .img-thumbnail {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Ensure button alignment and spacing */
+    .btn {
+        width: auto;
+        margin-top: 1rem;
+    }
+</style>
+
+{% endblock %}

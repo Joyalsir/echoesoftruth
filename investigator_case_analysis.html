@@ -1,0 +1,61 @@
+{% extends "investigator/base.html" %}
+{% block content %}
+
+<main class="container mt-5">
+    <h2>Case Analysis</h2>
+    <div class="row">
+        {% for analysis in case_analysis %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title">{{ analysis.case.case_title }}</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Victim:</strong> {{ analysis.case.victim.name }}</p>
+                    <p><strong>Analysis Summary:</strong>
+                        {% if analysis.analysis_summary|length > 20 %}
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#summaryModal{{ forloop.counter }}">
+                            View Full Summary
+                        </button>
+                        {% else %}
+                            {{ analysis.analysis_summary }}
+                        {% endif %}
+                    </p>
+                    
+                    <p><strong>Identified Suspect:</strong> {{ analysis.identified_suspect.name|default:"N/A" }}</p>
+                    <p><strong>Final Conclusion:</strong> {{ analysis.final_conclusion }}</p>
+                    <p><strong>Updated At:</strong> {{ analysis.updated_at }}</p>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Full Summary -->
+        <div class="modal fade" id="summaryModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="summaryModalLabel{{ forloop.counter }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="summaryModalLabel{{ forloop.counter }}">Full Analysis Summary</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ analysis.analysis_summary }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                No case analysis available.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}

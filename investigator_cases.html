@@ -1,0 +1,118 @@
+{% extends 'investigator/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Assigned Cases</h2>
+    {% if cases %}
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Case Title</th>
+                    <th>Description</th>
+                    <th>Victim</th>
+                    <th>Status</th>
+                    <th>Incident Place</th>
+                    <!-- <th>Images</th> -->
+                    <th>Update</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for case in cases %}
+                <tr>
+                    <td>{{ case.case_title }}</td>
+                    
+                    <!-- Description with Read More -->
+                    <td>
+                        {% if case.case_description|length > 50 %}
+                            {{ case.case_description|slice:":50" }}...
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#caseModal{{ case.id }}">Read More</a>
+                        {% else %}
+                            {{ case.case_description }}
+                        {% endif %}
+                    </td>
+                    
+                    <td>{{ case.victim_details }}</td>
+                    <td id="status-{{ case.id }}">{{ case.status }}</td>
+                    <td>{{ case.incident_place }}</td>
+                 
+                    
+                    <!-- Images -->
+                   
+
+                    <td>
+                        <a href="{% url 'evidence_collection' case.id %}" class="btn btn-warning btn-sm">Collect Evidence</a>
+                    </td>
+                    <!-- Status Update Dropdown -->
+                    <td>
+                        <select class="form-select status-dropdown" data-case-id="{{ case.id }}">
+                            <option value="Open" {% if case.status == "Open" %}selected{% endif %}>Open</option>
+                            <option value="In Progress" {% if case.status == "In Progress" %}selected{% endif %}>In Progress</option>
+                            <option value="Closed" {% if case.status == "Closed" %}selected{% endif %}>Closed</option>
+                        </select>
+                        <button class="btn btn-primary btn-sm mt-2 update-status" data-case-id="{{ case.id }}">Update</button>
+                    </td>
+                </tr>
+
+                <!-- Modal for Read More -->
+                <div class="modal fade" id="caseModal{{ case.id }}" tabindex="-1" aria-labelledby="caseModalLabel{{ case.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="caseModalLabel{{ case.id }}">{{ case.case_title }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>{{ case.case_description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">No cases assigned to you.</p>
+    {% endif %}
+</div>
+
+<!-- JavaScript for AJAX Request -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".update-status").forEach(button => {
+        button.addEventListener("click", function () {
+            let caseId = this.getAttribute("data-case-id");
+            let newStatus = document.querySelector(`.status-dropdown[data-case-id='${caseId}']`).value;
+            
+            fetch({% url 'update_case_status' %}, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    case_id: caseId,
+                    status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`status-${caseId}`).innerText = newStatus;
+                    alert("Case status updated successfully!");
+                } else {
+                    alert("Error updating case status.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+});
+</script>
+<style>
+    .modal-content {
+        background-color: white !important;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'investigator/base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2>Add New Case</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Case Title</label>
+            <input type="text" name="case_title" class="form-control" required>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>Case Description</label>
+            <textarea name="case_description" class="form-control" required></textarea>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>Incident Place</label>
+            <input type="text" name="incident_place" class="form-control" required>
+        </div>
+        <div class="form-group mt-3">
+            <label>Victim Details</label>
+            <input type="text" name="victim" class="form-control" required>
+        </div>
+
+        <!-- <div class="form-group mt-3">
+            <label>Victim</label>
+            <select name="victim" class="form-control" required>
+                <option value="">-- Select Victim --</option>
+                {% for v in victims %}
+                    <option value="{{ v.id }}">{{ v.victim_name }}</option>
+                {% endfor %}
+            </select>
+        </div> -->
+
+        <div class="form-group mt-3">
+            <label>Status</label>
+            <select name="status" class="form-control">
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Closed">Closed</option>
+            </select>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>Upload Images (optional)</label><br>
+            <input type="file" name="image1" accept="image/*">
+            <input type="file" name="image2" accept="image/*">
+            <input type="file" name="image3" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">Next → Add Evidence</button>
+    </form>
+</div>
+
+{% endblock %}

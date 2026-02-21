@@ -1,0 +1,46 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">All Victims</h2>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for victim in victims %}
+            <tr>
+                <td>{{ victim.id }}</td>
+                <td>{{ victim.username }}</td>
+                <td>{{ victim.name }}</td>
+                <td>{{ victim.email }}</td>
+                <td>{{ victim.phone }}</td>
+                <td>{{ victim.address }}</td>
+                <td>
+                    {% if victim.image %}
+                        <img src="{{ victim.image.url }}" width="50" height="50">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not victim.victim_id.is_active %}
+                        <a href="{% url 'accept_victim' victim.victim_id.id %}" class="btn btn-success">Accept</a>
+                    {% endif %}
+                    <a href="{% url 'reject_victim' victim.victim_id.id %}" class="btn btn-danger">Reject</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

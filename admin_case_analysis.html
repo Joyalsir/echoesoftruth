@@ -1,0 +1,19 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Case Details</h2>
+
+    <div class="card p-4 shadow">
+        <h4>Case ID: {{ case.id }}</h4>
+        <p><strong>Title:</strong> {{ case.case_title }}</p>
+        <p><strong>Description:</strong> {{ case.evidence_description }}</p>
+        <p><strong>Witness Statements:</strong> {{ case.witness_statements }}</p>
+        <p><strong>Forensic Report:</strong> {{ case.forensic_report }}</p>
+        <p><strong>Suspect Details:</strong> {{ case.suspect_details }}</p>
+        <p><strong>Investigator:</strong> {{ case.investigator.name }}</p>
+        <hr>
+
+       
+</div>
+{% endblock %}

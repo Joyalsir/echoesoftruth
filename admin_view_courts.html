@@ -1,0 +1,42 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Registered Courts</h2>
+    <table class="table table-bordered text-center">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Court Name</th>
+                <th>Type</th>
+                <th>Judge</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for court in courts %}
+            <tr>
+                <td>{{ court.id }}</td>
+                <td>{{ court.court_name }}</td>
+                <td>{{ court.court_type }}</td>
+                <td>{{ court.judge_name }}</td>
+                <td>{{ court.email }}</td>
+                <td>{{ court.phone }}</td>
+                <td>{{ court.address }}</td>
+                <td>
+                    {% if court.court_image %}
+                    <img src="{{ court.court_image.url }}" width="80" height="80" class="rounded">
+                    {% else %}
+                    No Image
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8">No courts added yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Approve Investigator Change for Case: {{ case.case_title }}</h2>
+
+    <p><strong>Current Investigator:</strong> {{ case.investigator.name }}</p>
+    <p><strong>Requested Investigator:</strong> {{ case.requested_investigator.name }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+    </form>
+</div>
+{% endblock %}

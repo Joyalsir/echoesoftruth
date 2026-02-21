@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<main>
+    <h2 style="text-align: center; margin-top: 40px;">Case Analysis Summary</h2>
+    <canvas id="caseAnalysisChart" style="max-width: 600px; margin: auto;"></canvas>
+</main><br><br>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('caseAnalysisChart').getContext('2d');
+    var caseData = JSON.parse('{{ case_data_json|safe }}');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(caseData),
+            datasets: [{
+                label: 'Number of Cases',
+                data: Object.values(caseData),
+                backgroundColor: ['blue', 'green', 'red'],
+                borderColor: 'black',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+{% endblock %}

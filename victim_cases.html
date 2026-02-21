@@ -1,0 +1,124 @@
+{% extends 'victim/base.html' %}
+
+{% block content %}
+<main class="container mt-4">
+    <h2 class="text-center mb-3">Your Reported Cases</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 15%;">Title</th>
+                    <th style="width: 25%;">Description</th>
+                    <th style="width: 12%;">Incident Place</th>
+                    <th style="width: 10%;">Status</th>
+                    <th style="width: 12%;">Investigator</th>
+                    <th style="width: 10%;">Images</th>
+                    <th style="width: 11%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for case in cases %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="text-start">{{ case.case_title }}</td>
+                    <td class="text-start">
+                        {% if case.case_description|length > 100 %}
+                            {{ case.case_description|slice:":100" }}...
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#descModal{{ case.id }}" class="text-primary">Read More</a>
+
+                            <!-- Modal for Full Description -->
+                            <div class="modal fade" id="descModal{{ case.id }}" tabindex="-1" aria-labelledby="descModalLabel{{ case.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="descModalLabel{{ case.id }}">{{ case.case_title }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">{{ case.case_description }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            {{ case.case_description }}
+                        {% endif %}
+                    </td>
+                    <td>{{ case.incident_place }}</td>
+                    <td>
+                        {% if case.status == "Open" %}
+                            <span class="badge bg-success">🟢 Open</span>
+                        {% elif case.status == "In Progress" %}
+                            <span class="badge bg-warning text-dark">🟡 In Progress</span><br>
+                            <a href="{% url 'view_evidence' case.id %}" class="text-primary">🔍 View Evidence</a>
+                        {% elif case.status == "Closed" %}
+                            <span class="badge bg-danger">🔴 Closed</span><br>
+                            <a href="{% url 'view_evidence' case.id %}" class="text-primary">📁 View Evidence</a>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ case.status }}</span>
+                        {% endif %}
+                    </td>                
+                    <td>
+                        {% if case.investigator %}
+                            {{ case.investigator.name }}
+                        {% else %}
+                            <span class="text-muted">Not Assigned</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center flex-wrap gap-1">
+                            {% if case.image1 %}
+                                <img src="{{ case.image1.url }}" alt="Image1" class="rounded" width="50" height="50">
+                            {% endif %}
+                            {% if case.image2 %}
+                                <img src="{{ case.image2.url }}" alt="Image2" class="rounded" width="50" height="50">
+                            {% endif %}
+                            {% if case.image3 %}
+                                <img src="{{ case.image3.url }}" alt="Image3" class="rounded" width="50" height="50">
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="{% url 'edit_case' case.id %}" class="btn btn-warning btn-sm">✏️ Edit</a>
+                            <a href="{% url 'delete_case' case.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this case?');">🗑️ Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>    
+                    <td colspan="8" class="text-center text-muted">No cases reported yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<style>
+    /* Improve modal background and visibility */
+    .modal-content {
+        background-color: white;
+        color: black;
+    }
+
+    /* Adjust modal backdrop */
+    .modal-backdrop {
+        background-color: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Make the table more compact */
+    .table th, .table td {
+        vertical-align: middle;
+        padding: 10px;
+    }
+
+    /* Improve alignment for images */
+    .d-flex.justify-content-center img {
+        object-fit: cover;
+        border: 1px solid #ddd;
+        padding: 2px;
+    }
+</style>
+
+{% endblock %}

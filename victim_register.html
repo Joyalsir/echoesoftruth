@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="page-title-area">
+    <div class="container">
+        <div class="page-title-content text-center">
+            <h1>Register as Victim</h1>
+            <ul class="list-unstyled ps-0 mb-0">
+                <li class="d-inline-block">
+                    <a class="text-decoration-none" href="">Home</a>
+                </li>
+                <li class="d-inline-block">Victim Registration</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Start Registration Area -->
+<div class="login-area ptb-100"> 
+    <div class="container">
+        <div class="login-info" data-cue="slideInUp">
+            <h1>Register Now</h1>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="address" class="form-control" placeholder="Address" required></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="image" class="form-control">
+                </div>
+                
+                <button class="default-btn border-0" type="submit">
+                    <i class="ri-arrow-right-line"></i>
+                    Register Now
+                </button>
+                
+                <p>Already have an account? <a class="text-decoration-none" href="{% url 'view_login' %}">Log In</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- End Registration Area -->
+{% endblock %}

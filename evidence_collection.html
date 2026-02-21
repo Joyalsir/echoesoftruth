@@ -1,0 +1,86 @@
+{% extends 'investigator/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-4 text-primary">Evidence Collection for "{{ case.case_title }}"</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="evidence_description" class="form-label fw-bold">Evidence Description</label>
+                    <textarea class="form-control" id="evidence_description" name="evidence_description" rows="3" placeholder="Describe the collected evidence...">{{ case.evidence_description }}</textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="witness_statements" class="form-label fw-bold">Witness Statements</label>
+                    <textarea class="form-control" id="witness_statements" name="witness_statements" rows="3" placeholder="Enter witness statements...">{{ case.witness_statements }}</textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="forensic_report" class="form-label fw-bold">Forensic Report</label>
+                    <textarea class="form-control" id="forensic_report" name="forensic_report" rows="3" placeholder="Provide forensic details...">{{ case.forensic_report }}</textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="suspect_details" class="form-label fw-bold">Suspect Details</label>
+                    <textarea class="form-control" id="suspect_details" name="suspect_details" rows="3" placeholder="Enter suspect details...">{{ case.suspect_details }}</textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="form-label fw-bold">Upload Evidence Images</label>
+                <div class="col-md-4 text-center">
+                    {% if case.evidence_image1 %}
+                        <img src="{{ case.evidence_image1.url }}" alt="Evidence Image 1" style="height:200px;" class="img-thumbnail mb-2" width="150">
+                    {% endif %}
+                    <input type="file" class="form-control" name="evidence_image1">
+                </div>
+                <div class="col-md-4 text-center">
+                    {% if case.evidence_image2 %}
+                        <img src="{{ case.evidence_image2.url }}" style="height:200px;"  alt="Evidence Image 2" class="img-thumbnail mb-2" width="150">
+                    {% endif %}
+                    <input type="file" class="form-control" name="evidence_image2">
+                </div>
+                <div class="col-md-4 text-center">
+                    {% if case.evidence_image3 %}
+                        <img src="{{ case.evidence_image3.url }}" style="height:200px;"  alt="Evidence Image 3" class="img-thumbnail mb-2" width="150">
+                    {% endif %}
+                    <input type="file" class="form-control" name="evidence_image3">
+                </div>
+            </div>
+
+        <div class="row mb-3">
+    <div class="col-md-12">
+        <label for="evidence_video" class="form-label fw-bold">Upload Evidence Video</label>
+        {% if case.evidence_video %}
+            <video width="300" controls class="mb-2">
+                <source src="{{ case.evidence_video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p class="text-muted">
+                Verdict: <b>{{ case.video_verdict }}</b> |
+                Confidence: <b>{{ case.video_confidence|floatformat:2 }}</b>
+            </p>
+        {% endif %}
+        <input type="file" class="form-control" name="evidence_video" accept="video/*">
+    </div>
+</div>
+
+
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-4 py-2">Save Evidence</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

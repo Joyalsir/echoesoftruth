@@ -1,0 +1,53 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-lg p-4 mx-auto" style="max-width: 600px;">
+        <h2 class="text-center text-primary mb-3">Add Suspect</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Suspect Name</label>
+                    <input type="text" class="form-control form-control-sm" name="name" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Age</label>
+                    <input type="number" class="form-control form-control-sm" name="age">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Address</label>
+                <textarea class="form-control form-control-sm" name="address" rows="2"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Description</label>
+                <textarea class="form-control form-control-sm" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Upload Image</label>
+                <input type="file" class="form-control form-control-sm" name="image">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Status</label>
+                <select class="form-control form-control-sm" name="status">
+                    <option value="Under Investigation">Under Investigation</option>
+                    <option value="Arrested">Arrested</option>
+                    <option value="Released">Released</option>
+                </select>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-sm px-4">Save Suspect</button>
+            </div>
+        </form>
+    </div>
+</div><br><br>
+
+{% endblock %}

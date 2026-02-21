@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<main class="container mt-4">
+    <h2 class="text-center mb-4">Requested Investigator Changes</h2>
+
+    {% if requested_cases %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No.</th>
+                        <th>Case Title</th>
+                        <th>Current Investigator</th>
+                        <th>Requested Investigator</th>
+                        <th>Victim</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for case in requested_cases %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ case.case_title }}</td>
+                        <td>{{ case.investigator.name }}</td>
+                        <td>{{ case.requested_investigator.name }}</td>
+                        <td>{{ case.victim.name }}</td>
+                        <td>
+                            <form method="post" action="{% url 'approve_investigator_change' case.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form method="post" action="{% url 'reject_investigator_change' case.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center text-muted">No requested investigator changes.</p>
+    {% endif %}
+</main>
+{% endblock %}
